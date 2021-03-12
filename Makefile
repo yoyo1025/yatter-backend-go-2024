@@ -30,8 +30,8 @@ test:
 	go test $(shell go list ${MAKEFILE_DIR}/...)
 
 lint:
-	if ! [ -x bin/golangci-lint ]; then \
-		wget -O - -q https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s v1.24.0 ; \
+	if ! [ -x $(GOPATH)/bin/golangci-lint ]; then \
+		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin v1.38.0 ; \
 	fi
 	golangci-lint run --concurrency 2
 
