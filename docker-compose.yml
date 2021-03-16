@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     working_dir: "/work/yatter-backend-go"
-    command: [sh, -c, "air"]
+    command: ["air"]
     volumes:
       - ".:/work/yatter-backend-go"
       - "./.data/go-pkg:/go/pkg/mod/cache"

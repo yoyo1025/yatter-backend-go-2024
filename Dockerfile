@@ -1,12 +1,10 @@
 # dev, builder
-FROM golang:1.14 AS golang
+FROM golang:1.16 AS golang
 WORKDIR /work/yatter-backend-go
-ENV GO111MODULE=on
 
 # dev
 FROM golang as dev
-RUN curl -fLo /usr/local/bin/air https://raw.githubusercontent.com/cosmtrek/air/master/bin/linux/air \
-  && chmod +x /usr/local/bin/air
+RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
 # builder
 FROM golang AS builder
