@@ -22,3 +22,5 @@ func IDOf(r *http.Request) (int64, error) {
 
 	return id, nil
 }
+
+// TODO: Add UsernameOf
