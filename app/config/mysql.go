@@ -1,70 +1,70 @@
 package config
 
 import (
-	"fmt"
 	"log"
-	"time"
-
-	"github.com/go-sql-driver/mysql"
+	"strings"
 )
 
-// accessor namespace
-var MySQL _mysql
+type MySQL struct {
+	dataSourceName string
+	driverName     string
+}
 
-type _mysql struct{}
-
-func (_mysql) Host() string {
+func host() string {
 	v, err := getString("MYSQL_HOST")
 	if err != nil {
 		log.Fatal(err)
 	}
 	return v
 }
-func (_mysql) User() string {
+
+func user() string {
 	v, err := getString("MYSQL_USER")
 	if err != nil {
 		log.Fatal(err)
 	}
 	return v
 }
-func (_mysql) Password() string {
+
+func password() string {
 	v, err := getString("MYSQL_PASSWORD")
 	if err != nil {
 		log.Fatal(err)
 	}
 	return v
 }
-func (_mysql) Database() string {
+
+func database() string {
 	v, err := getString("MYSQL_DATABASE")
 	if err != nil {
 		log.Fatal(err)
 	}
 	return v
 }
-func (_mysql) Location() *time.Location {
+
+func timeZone() string {
 	tz, err := getString("MYSQL_TZ")
 	if err != nil {
-		return time.FixedZone("Asia/Tokyo", 9*60*60)
+		return "Asia%2FTokyo"
 	}
-	loc, err := time.LoadLocation(tz)
-	if err != nil {
-		log.Fatal(fmt.Errorf("Invalid timezone %+v", tz))
-	}
-	return loc
+
+	return strings.Replace(tz, "/", "%2F", 1)
 }
 
-func MySQLConfig() *mysql.Config {
-	cfg := mysql.NewConfig()
+func (m MySQL) DriverName() string {
+	return m.driverName
+}
 
-	cfg.ParseTime = true
-	cfg.Loc = MySQL.Location()
-	if host := MySQL.Host(); host != "" {
-		cfg.Net = "tcp"
-		cfg.Addr = host
+func (m MySQL) DataSourceName() string {
+	return m.dataSourceName
+}
+
+func MySQLConfig() *MySQL {
+	driverName := "mysql"
+	dataSourceName := user() + ":" + password() + "@tcp(" + host() + ")/" + database() + "?parseTime=true&loc=" + timeZone()
+
+	return &MySQL{
+		dataSourceName: dataSourceName,
+		driverName:     driverName,
 	}
-	cfg.User = MySQL.User()
-	cfg.Passwd = MySQL.Password()
-	cfg.DBName = MySQL.Database()
-
-	return cfg
 }

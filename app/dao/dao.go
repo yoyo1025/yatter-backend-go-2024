@@ -3,9 +3,10 @@ package dao
 import (
 	"fmt"
 	"log"
+	"yatter-backend-go/app/config"
 	"yatter-backend-go/app/domain/repository"
 
-	"github.com/go-gorp/gorp/v3"
+	"github.com/jmoiron/sqlx"
 )
 
 type (
@@ -15,21 +16,21 @@ type (
 	}
 
 	dao struct {
-		dbmap *gorp.DbMap
+		db *sqlx.DB
 	}
 )
 
-func New(config DBConfig) (Dao, error) {
-	dbmap, err := initDb(config)
+func New(config config.MySQL) (Dao, error) {
+	db, err := initDb(config)
 	if err != nil {
 		return nil, err
 	}
 
-	return &dao{dbmap: dbmap}, nil
+	return &dao{db: db}, nil
 }
 
 func (d *dao) Account() repository.Account {
-	return NewAccount(d.dbmap)
+	return NewAccount(d.db)
 }
 
 func (d *dao) InitAll() error {
@@ -54,6 +55,6 @@ func (d *dao) InitAll() error {
 }
 
 func (d *dao) exec(query string, args ...interface{}) error {
-	_, err := d.dbmap.Exec(query, args...)
+	_, err := d.db.Exec(query, args...)
 	return err
 }

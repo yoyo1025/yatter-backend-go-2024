@@ -3,6 +3,8 @@ package app
 import (
 	"yatter-backend-go/app/config"
 	"yatter-backend-go/app/dao"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type App struct {
@@ -13,7 +15,7 @@ func NewApp() (*App, error) {
 	// panic if lacking something
 	daoCfg := config.MySQLConfig()
 
-	dao, err := dao.New(daoCfg)
+	dao, err := dao.New(*daoCfg)
 	if err != nil {
 		return nil, err
 	}
