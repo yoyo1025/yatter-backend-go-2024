@@ -2,9 +2,7 @@ package object
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/go-gorp/gorp/v3"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -43,11 +41,6 @@ type (
 		CreateAt DateTime `json:"create_at,omitempty" db:"create_at"`
 	}
 )
-
-func (a *Account) PreInsert(s gorp.SqlExecutor) error {
-	a.CreateAt = DateTime{time.Now()}
-	return nil
-}
 
 func (a *Account) CheckPassword(pass string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(a.PasswordHash), []byte(pass)) == nil
