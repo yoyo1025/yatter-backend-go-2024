@@ -16,7 +16,6 @@ type (
 	}
 )
 
-// NewAccount : Accountを生成
 func NewAccount(db *sqlx.DB) repository.Account {
 	return &account{db: db}
 }
