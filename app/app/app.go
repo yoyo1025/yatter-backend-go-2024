@@ -3,8 +3,6 @@ package app
 import (
 	"yatter-backend-go/app/config"
 	"yatter-backend-go/app/dao"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 type App struct {
