@@ -9,8 +9,6 @@ import (
 	"yatter-backend-go/app/app"
 	"yatter-backend-go/app/config"
 	"yatter-backend-go/app/handler"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {

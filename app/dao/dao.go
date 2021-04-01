@@ -3,7 +3,6 @@ package dao
 import (
 	"fmt"
 	"log"
-	"yatter-backend-go/app/config"
 	"yatter-backend-go/app/domain/repository"
 
 	"github.com/jmoiron/sqlx"
@@ -20,7 +19,7 @@ type (
 	}
 )
 
-func New(config config.MySQL) (Dao, error) {
+func New(config DBConfig) (Dao, error) {
 	db, err := initDb(config)
 	if err != nil {
 		return nil, err

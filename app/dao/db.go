@@ -3,13 +3,16 @@ package dao
 import (
 	"fmt"
 
-	"yatter-backend-go/app/config"
-
 	"github.com/jmoiron/sqlx"
 )
 
-func initDb(config config.MySQL) (*sqlx.DB, error) {
-	db, err := sqlx.Open(config.DriverName(), config.DataSourceName())
+type DBConfig interface {
+	FormatDSN() string
+}
+
+func initDb(config DBConfig) (*sqlx.DB, error) {
+	driverName := "mysql"
+	db, err := sqlx.Open(driverName, config.FormatDSN())
 	if err != nil {
 		return nil, fmt.Errorf("sqlx.Open failed: %w", err)
 	}
