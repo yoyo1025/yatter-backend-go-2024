@@ -8,30 +8,32 @@ import (
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
-	"github.com/go-gorp/gorp/v3"
+	"github.com/jmoiron/sqlx"
 )
 
 type (
 	// Implementation for repository.Account
 	account struct {
-		sql gorp.SqlExecutor
+		db *sqlx.DB
 	}
 )
 
 // Create accout repository
-func NewAccount(sql gorp.SqlExecutor) repository.Account {
-	return &account{sql: sql}
+func NewAccount(db *sqlx.DB) repository.Account {
+	return &account{db: db}
 }
 
+// FindByUsername : ユーザ名からユーザを取得
 func (r *account) FindByUsername(ctx context.Context, username string) (*object.Account, error) {
 	entity := new(object.Account)
-	err := r.sql.SelectOne(entity, "select * from account where username = ?", username)
+	err := r.db.QueryRowxContext(ctx, "select * from account where username = ?", username).StructScan(entity)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
-		} else {
-			return nil, fmt.Errorf("%w", err)
 		}
+
+		return nil, fmt.Errorf("%w", err)
 	}
+
 	return entity, nil
 }
