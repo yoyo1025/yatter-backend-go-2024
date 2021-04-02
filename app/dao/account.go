@@ -12,11 +12,13 @@ import (
 )
 
 type (
+	// Implementation for repository.Account
 	account struct {
 		sql gorp.SqlExecutor
 	}
 )
 
+// Create accout repository
 func NewAccount(sql gorp.SqlExecutor) repository.Account {
 	return &account{sql: sql}
 }

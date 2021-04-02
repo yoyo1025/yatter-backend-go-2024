@@ -9,16 +9,22 @@ import (
 )
 
 type (
+	// DAO object interface
 	Dao interface {
+		// Get account repository
 		Account() repository.Account
+
+		// Clear all data in DB
 		InitAll() error
 	}
 
+	// Implementation for DAO
 	dao struct {
 		dbmap *gorp.DbMap
 	}
 )
 
+// Create DAO object
 func New(config DBConfig) (Dao, error) {
 	dbmap, err := initDb(config)
 	if err != nil {

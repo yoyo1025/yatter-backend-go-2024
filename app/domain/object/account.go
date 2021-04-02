@@ -25,7 +25,6 @@ type (
 		PasswordHash string `json:"-" db:"password_hash"`
 
 		// The account's display name
-		// The account's display name
 		DisplayName string `json:"display_name,omitempty" db:"display_name"`
 
 		// URL to the avatar image
@@ -45,15 +44,19 @@ type (
 	}
 )
 
+// Implement gorp.HasPreInsert
+// see: https://github.com/go-gorp/gorp#hooks
 func (a *Account) PreInsert(s gorp.SqlExecutor) error {
 	a.CreateAt = DateTime{time.Now()}
 	return nil
 }
 
+// Check if `pass` is match to account's password
 func (a *Account) CheckPassword(pass string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(a.PasswordHash), []byte(pass)) == nil
 }
 
+// Hash password and set it to account object
 func (a *Account) SetPassword(pass string) error {
 	passwordHash, err := generatePasswordHash(pass)
 	if err != nil {

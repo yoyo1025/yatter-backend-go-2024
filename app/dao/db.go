@@ -9,10 +9,12 @@ import (
 	"github.com/go-gorp/gorp/v3"
 )
 
+// Interface of configureation
 type DBConfig interface {
 	FormatDSN() string
 }
 
+// Prepare gorp.DbMap
 func initDb(config DBConfig) (*gorp.DbMap, error) {
 	// connect to db using standard Go database/sql API
 	// use whatever database/sql driver you wish
