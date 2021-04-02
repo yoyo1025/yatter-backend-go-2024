@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
@@ -25,7 +26,7 @@ func (r *account) FindByUsername(ctx context.Context, username string) (*object.
 	entity := new(object.Account)
 	err := r.db.QueryRowxContext(ctx, "select * from account where username = ?", username).StructScan(entity)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 
