@@ -2,9 +2,7 @@ package object
 
 import (
 	"fmt"
-	"time"
 
-	"github.com/go-gorp/gorp/v3"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -25,30 +23,24 @@ type (
 		PasswordHash string `json:"-" db:"password_hash"`
 
 		// The account's display name
-		// The account's display name
-		DisplayName string `json:"display_name,omitempty" db:"display_name"`
+		DisplayName *string `json:"display_name,omitempty" db:"display_name"`
 
 		// URL to the avatar image
-		Avatar string `json:"avatar,omitempty"`
+		Avatar *string `json:"avatar,omitempty"`
 
 		// URL to the header image
-		Header string `json:"header,omitempty"`
+		Header *string `json:"header,omitempty"`
 
 		// Biography of user
-		Note string `json:"note,omitempty"`
+		Note *string `json:"note,omitempty"`
 
 		// URL of the user's profile page (can be remote)
-		URL string `json:"url,omitempty"`
+		URL *string `json:"url,omitempty"`
 
 		// The time the account was created
 		CreateAt DateTime `json:"create_at,omitempty" db:"create_at"`
 	}
 )
-
-func (a *Account) PreInsert(s gorp.SqlExecutor) error {
-	a.CreateAt = DateTime{time.Now()}
-	return nil
-}
 
 func (a *Account) CheckPassword(pass string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(a.PasswordHash), []byte(pass)) == nil
