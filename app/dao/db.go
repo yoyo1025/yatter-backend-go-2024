@@ -6,10 +6,12 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Interface of configureation
 type DBConfig interface {
 	FormatDSN() string
 }
 
+// Prepare sqlx.DB
 func initDb(config DBConfig) (*sqlx.DB, error) {
 	driverName := "mysql"
 	db, err := sqlx.Open(driverName, config.FormatDSN())

@@ -42,10 +42,12 @@ type (
 	}
 )
 
+// Check if given password is match to account's password
 func (a *Account) CheckPassword(pass string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(a.PasswordHash), []byte(pass)) == nil
 }
 
+// Hash password and set it to account object
 func (a *Account) SetPassword(pass string) error {
 	passwordHash, err := generatePasswordHash(pass)
 	if err != nil {

@@ -12,11 +12,13 @@ import (
 )
 
 type (
+	// Implementation for repository.Account
 	account struct {
 		db *sqlx.DB
 	}
 )
 
+// Create accout repository
 func NewAccount(db *sqlx.DB) repository.Account {
 	return &account{db: db}
 }

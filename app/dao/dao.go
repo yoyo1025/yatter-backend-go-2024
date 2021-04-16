@@ -9,16 +9,22 @@ import (
 )
 
 type (
+	// DAO interface
 	Dao interface {
+		// Get account repository
 		Account() repository.Account
+
+		// Clear all data in DB
 		InitAll() error
 	}
 
+	// Implementation for DAO
 	dao struct {
 		db *sqlx.DB
 	}
 )
 
+// Create DAO
 func New(config DBConfig) (Dao, error) {
 	db, err := initDb(config)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Read path parameter `id`
 func IDOf(r *http.Request) (int64, error) {
 	ids := chi.URLParam(r, "id")
 
@@ -22,5 +23,3 @@ func IDOf(r *http.Request) (int64, error) {
 
 	return id, nil
 }
-
-// TODO: Add UsernameOf
