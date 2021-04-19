@@ -37,7 +37,7 @@ Using `app/domain/object` even as DTO for DB.
 └── ddl      ----> DB definition master
 ```
 
-※ 本来は usercase レイヤーが必要となるが、handler レイヤーへ合体
+※ 本来は usecase レイヤーが必要となるが、handler レイヤーへ合体
 
 ![モジュールの依存関係](doc/module_dependency.png)
 
