@@ -2,75 +2,84 @@ package dao
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
-	sq "github.com/Masterminds/squirrel"
-	"github.com/go-gorp/gorp/v3"
+	"github.com/jmoiron/sqlx"
 )
 
 type (
+	// Implementation for repository.Status
 	status struct {
-		sql gorp.SqlExecutor
+		db *sqlx.DB
 	}
 )
 
-func NewStatus(sql gorp.SqlExecutor) repository.Status {
-	return &status{sql: sql}
+// Create accout repository
+func NewStatus(db *sqlx.DB) repository.Status {
+	return &status{db: db}
 }
 
-func (r *status) Find(ctx context.Context, id int64) (*object.Status, error) {
+// Find: IDでステータスを取得
+func (r *status) Find(ctx context.Context, id object.StatusID) (*object.Status, error) {
 	entity := new(object.Status)
-	exists, err := r.sql.Get(entity, id)
+	err := r.db.QueryRowxContext(ctx, "select * from status where id = ?", id).StructScan(entity)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+
 		return nil, fmt.Errorf("%w", err)
-	} else if exists == nil {
-		return nil, nil
 	}
+
 	return entity, nil
 }
 
-func (r *status) Create(ctx context.Context, entity *object.Status) error {
-	if err := r.sql.Insert(entity); err != nil {
-		return fmt.Errorf("%w", err)
+// FindMany: IDでステータスを取得
+func (r *status) FindMany(ctx context.Context, condition *object.FindStatusCondition) ([]*object.Status, error) {
+	query := `select * from status`
+	if condition.SinceID > 0 && condition.MaxID > 0 {
+		query = fmt.Sprintf(`%s where id between %d AND %d`, query, condition.SinceID, condition.MaxID)
+	} else if condition.SinceID > 0 {
+		query = fmt.Sprintf(`%s where %d <= id`, query, condition.SinceID)
+	} else if condition.MaxID > 0 {
+		query = fmt.Sprintf(`%s where id <= %d`, query, condition.MaxID)
 	}
-	return nil
-}
-
-func (r *status) Update(ctx context.Context, entity *object.Status) error {
-	if _, err := r.sql.Update(entity); err != nil {
-		return fmt.Errorf("%w", err)
-	}
-	return nil
-}
-
-func (r *status) FindMany(ctx context.Context, cond *object.FindStatusCondition) ([]*object.Status, error) {
-	query := sq.Select("*").From("status")
-	if cond.Limit > 0 && cond.Limit <= 80 {
-		query = query.Limit(uint64(cond.Limit))
-	} else {
-		query = query.Limit(40)
+	if condition.Limit > 0 {
+		query = fmt.Sprintf(`%s limit %d`, query, condition.Limit)
 	}
 
-	if cond.SinceID > 0 {
-		query = query.Where(sq.Gt{"id": cond.SinceID})
-	}
-
-	if cond.MaxID > 0 {
-		query = query.Where(sq.Lt{"id": cond.MaxID})
-	}
-
-	query = query.OrderBy("id DESC")
-
-	sql, args, err := query.ToSql()
-	if err != nil {
+	entities := make([]*object.Status, 0)
+	if err := r.db.SelectContext(ctx, &entities, query); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	var result []*object.Status
-	if _, err := r.sql.Select(&result, sql, args...); err != nil {
-		return nil, fmt.Errorf("%w", err)
+	return entities, nil
+}
+
+// Create : ステータスを作成
+func (r *status) Create(ctx context.Context, status *object.Status) error {
+	if _, err := r.db.ExecContext(ctx, `
+	insert into status (account_id, content)
+	values (?, ?)
+	`, status.AccountID, status.Content); err != nil {
+		return fmt.Errorf("%w", err)
 	}
-	return result, nil
+
+	return nil
+}
+
+// Delete : ステータスを削除
+func (r *status) Delete(ctx context.Context, id object.StatusID) error {
+	if _, err := r.db.ExecContext(ctx, `delete from status where id = ?`, id); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+
+	return nil
 }

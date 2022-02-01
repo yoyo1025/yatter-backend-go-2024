@@ -1,11 +1,6 @@
-forked from https://github.com/dmm-com/mission-dmm-bootcamp-go
-
-# mission-dmm-bootcamp-go
-TechBowl社MISSION用テンプレートリポジトリ(新卒研修-Go)
+# yatter-backend-go
 
 ## Table of Contents
-* [Mission](#mission)
-* [Vocabulary](#vocabulary)
 * [Development Environment](#development-environment)
     * [Requirements](#requirements)
 	* [Start](#start)
@@ -19,22 +14,6 @@ TechBowl社MISSION用テンプレートリポジトリ(新卒研修-Go)
     * [Module Dependency](#module-dependency)
     * [Library](#library)
     * [Utilities](#utilities)
-
-## Mission
-このMISSIONではDMMのGo新卒研修の演習課題を体験していただきます。
-
-演習課題ではTwitter・Mastodonライクな仮想のサービス、Yatterを実装していきます。
-
-みなさんにはこのMISSIONでYatterのバックエンドAPIを実装していただきます。
-
-## Vocabulary
-* status：SNSへの投稿
-    * follow：他のアカウントのステータスを購読すること
-    * following：あるアカウントがfollowしているアカウント
-    * follower：あるアカウントをfollowしているアカウント
-* timeline：時系列順に並んだstatusの集まり
-    * public timeline：全アカウントのstatusが集まるtimeline
-    * home timeline：followしているアカウントのstatusが集まるtimeline
 
 
 ## Development Environment

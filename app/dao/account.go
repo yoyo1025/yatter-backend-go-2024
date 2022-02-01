@@ -37,3 +37,32 @@ func (r *account) FindByUsername(ctx context.Context, username string) (*object.
 
 	return entity, nil
 }
+
+// Create : ユーザを作成
+func (r *account) Create(ctx context.Context, account *object.Account) error {
+	if _, err := r.db.ExecContext(ctx, `
+	insert into account (username, password_hash, display_name, avatar, header, note)
+	values (?, ?, ?, ?, ?, ?)
+	`, account.Username, account.PasswordHash, account.DisplayName, account.Avatar, account.Header, account.Note); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+
+	return nil
+}
+
+// Create : ユーザの更新
+func (r *account) Update(ctx context.Context, account *object.Account) error {
+	if _, err := r.db.ExecContext(ctx, `
+	update account
+		set username = ?,
+		set passwordhash = ?,
+		set displayname = ?,
+		set avatar = ?,
+		set header = ?,
+		set note = ?
+	`, account.Username, account.PasswordHash, account.DisplayName, account.Avatar, account.Header, account.Note); err != nil {
+		return fmt.Errorf("%w", err)
+	}
+
+	return nil
+}
