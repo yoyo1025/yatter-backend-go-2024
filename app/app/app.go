@@ -5,10 +5,12 @@ import (
 	"yatter-backend-go/app/dao"
 )
 
+// Dependency manager for whole application
 type App struct {
 	Dao dao.Dao
 }
 
+// Create dependency manager
 func NewApp() (*App, error) {
 	// panic if lacking something
 	daoCfg := config.MySQLConfig()

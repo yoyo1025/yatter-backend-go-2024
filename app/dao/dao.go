@@ -5,36 +5,37 @@ import (
 	"log"
 	"yatter-backend-go/app/domain/repository"
 
-	"github.com/go-gorp/gorp/v3"
+	"github.com/jmoiron/sqlx"
 )
 
 type (
+	// DAO interface
 	Dao interface {
+		// Get account repository
 		Account() repository.Account
-		Status() repository.Status
+
+		// Clear all data in DB
 		InitAll() error
 	}
 
+	// Implementation for DAO
 	dao struct {
-		dbmap *gorp.DbMap
+		db *sqlx.DB
 	}
 )
 
+// Create DAO
 func New(config DBConfig) (Dao, error) {
-	dbmap, err := initDb(config)
+	db, err := initDb(config)
 	if err != nil {
 		return nil, err
 	}
 
-	return &dao{dbmap: dbmap}, nil
+	return &dao{db: db}, nil
 }
 
 func (d *dao) Account() repository.Account {
-	return NewAccount(d.dbmap)
-}
-
-func (d *dao) Status() repository.Status {
-	return NewStatus(d.dbmap)
+	return NewAccount(d.db)
 }
 
 func (d *dao) InitAll() error {
@@ -59,6 +60,6 @@ func (d *dao) InitAll() error {
 }
 
 func (d *dao) exec(query string, args ...interface{}) error {
-	_, err := d.dbmap.Exec(query, args...)
+	_, err := d.db.Exec(query, args...)
 	return err
 }

@@ -46,6 +46,7 @@ func Middleware(app *app.App) func(http.Handler) http.Handler {
 	}
 }
 
+// Read Account data from authorized request
 func AccountOf(r *http.Request) *object.Account {
 	if cv := r.Context().Value(contextKey); cv == nil {
 		return nil

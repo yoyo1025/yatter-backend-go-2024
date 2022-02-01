@@ -13,6 +13,7 @@ var MySQL _mysql
 
 type _mysql struct{}
 
+// Read MySQL host
 func (_mysql) Host() string {
 	v, err := getString("MYSQL_HOST")
 	if err != nil {
@@ -20,6 +21,8 @@ func (_mysql) Host() string {
 	}
 	return v
 }
+
+// Read MySQL user
 func (_mysql) User() string {
 	v, err := getString("MYSQL_USER")
 	if err != nil {
@@ -27,6 +30,8 @@ func (_mysql) User() string {
 	}
 	return v
 }
+
+// Read MySQL password
 func (_mysql) Password() string {
 	v, err := getString("MYSQL_PASSWORD")
 	if err != nil {
@@ -34,6 +39,8 @@ func (_mysql) Password() string {
 	}
 	return v
 }
+
+// Read MySQL database name
 func (_mysql) Database() string {
 	v, err := getString("MYSQL_DATABASE")
 	if err != nil {
@@ -41,6 +48,8 @@ func (_mysql) Database() string {
 	}
 	return v
 }
+
+// Read Timezone for MySQL
 func (_mysql) Location() *time.Location {
 	tz, err := getString("MYSQL_TZ")
 	if err != nil {
@@ -53,6 +62,7 @@ func (_mysql) Location() *time.Location {
 	return loc
 }
 
+// Build mysql.Config
 func MySQLConfig() *mysql.Config {
 	cfg := mysql.NewConfig()
 

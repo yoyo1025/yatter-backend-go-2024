@@ -11,6 +11,7 @@ const (
 	defaultPort = 8080
 )
 
+// Read port to listen on
 func Port() int {
 	num, err := getInt(portKey)
 	if err != nil {
