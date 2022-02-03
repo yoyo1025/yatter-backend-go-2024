@@ -8,11 +8,13 @@ import (
 	"yatter-backend-go/app/handler/httperror"
 )
 
+// Request body for `POST /v1/accounts`
 type AddRequest struct {
 	Username string
 	Password string
 }
 
+// Handle request for `POST /v1/accounts`
 func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -29,6 +31,11 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err := h.app.Dao.Account().Create(ctx, account)
+	if err != nil {
+		httperror.InternalServerError(w, err)
+		return
+	}
+	account, err = h.app.Dao.Account().FindByUsername(ctx, account.Username)
 	if err != nil {
 		httperror.InternalServerError(w, err)
 		return

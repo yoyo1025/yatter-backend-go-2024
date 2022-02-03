@@ -8,53 +8,61 @@ import (
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
-	"github.com/go-gorp/gorp/v3"
+	"github.com/jmoiron/sqlx"
 )
 
 type (
+	// Implementation for repository.Account
 	account struct {
-		sql gorp.SqlExecutor
+		db *sqlx.DB
 	}
 )
 
-func NewAccount(sql gorp.SqlExecutor) repository.Account {
-	return &account{sql: sql}
+// Create accout repository
+func NewAccount(db *sqlx.DB) repository.Account {
+	return &account{db: db}
 }
 
-func (r *account) Find(ctx context.Context, id int64) (*object.Account, error) {
-	entity := new(object.Account)
-	exists, err := r.sql.Get(entity, id)
-	if err != nil {
-		return nil, fmt.Errorf("%w", err)
-	} else if exists == nil {
-		return nil, nil
-	}
-	return entity, nil
-}
-
+// FindByUsername : ユーザ名からユーザを取得
 func (r *account) FindByUsername(ctx context.Context, username string) (*object.Account, error) {
 	entity := new(object.Account)
-	err := r.sql.SelectOne(entity, "select * from account where username = ?", username)
+	err := r.db.QueryRowxContext(ctx, "select * from account where username = ?", username).StructScan(entity)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
-		} else {
-			return nil, fmt.Errorf("%w", err)
 		}
+
+		return nil, fmt.Errorf("%w", err)
 	}
+
 	return entity, nil
 }
 
-func (r *account) Create(ctx context.Context, entity *object.Account) error {
-	if err := r.sql.Insert(entity); err != nil {
+// Create : ユーザを作成
+func (r *account) Create(ctx context.Context, account *object.Account) error {
+	if _, err := r.db.ExecContext(ctx, `
+	insert into account (username, password_hash, display_name, avatar, header, note)
+	values (?, ?, ?, ?, ?, ?)
+	`, account.Username, account.PasswordHash, account.DisplayName, account.Avatar, account.Header, account.Note); err != nil {
 		return fmt.Errorf("%w", err)
 	}
+
 	return nil
 }
 
-func (r *account) Update(ctx context.Context, entity *object.Account) error {
-	if _, err := r.sql.Update(entity); err != nil {
+// Create : ユーザの更新
+func (r *account) Update(ctx context.Context, account *object.Account) error {
+	if _, err := r.db.ExecContext(ctx, `
+	update account
+		set username = ?,
+		set passwordhash = ?,
+		set displayname = ?,
+		set avatar = ?,
+		set header = ?,
+		set note = ?
+	`, account.Username, account.PasswordHash, account.DisplayName, account.Avatar, account.Header, account.Note); err != nil {
 		return fmt.Errorf("%w", err)
 	}
+
 	return nil
 }
