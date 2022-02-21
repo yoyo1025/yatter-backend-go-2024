@@ -6,7 +6,7 @@ import (
 
 	"yatter-backend-go/app/handler/httperror"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 func (h *handler) Find(w http.ResponseWriter, r *http.Request) {

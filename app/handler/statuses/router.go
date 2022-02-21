@@ -6,7 +6,7 @@ import (
 	"yatter-backend-go/app/app"
 	"yatter-backend-go/app/handler/auth"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 type handler struct {
