@@ -122,7 +122,7 @@ DBなど外部モジュールへアクセスし、データの保存・取得・
 
 ### Library
 * HTTP
-    * chi（[ドキュメント](https://pkg.go.dev/github.com/go-chi/chi)）
+    * chi（[ドキュメント](https://pkg.go.dev/github.com/go-chi/chi/v5)）
 * DB
     * sqlx（[ドキュメント](https://pkg.go.dev/github.com/jmoiron/sqlx)）
 
@@ -156,7 +156,7 @@ func SomeHandler(w http.ResponseWriter, r *http.Request) {
 #### app/handler/auth
 認証付きエンドポイントの実装のためのミドルウェア関数を提供しています。
 `chi.Mux#Use`や`chi.Mux#With`を用いて利用できます。
-- [chiドキュメント](https://pkg.go.dev/github.com/go-chi/chi@v1.5.4)
+- [chiドキュメント](https://pkg.go.dev/github.com/go-chi/chi/v5)
 
 ミドルウェアを埋め込んだエンドポイントでは`*http.Request`から`AccountOf`でリクエストと紐づくアカウントを取得できます。
 ```
