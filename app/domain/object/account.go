@@ -3,7 +3,6 @@ package object
 import (
 	"fmt"
 
-	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -57,7 +56,7 @@ func (a *Account) SetPassword(pass string) error {
 func generatePasswordHash(pass string) (PasswordHash, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
-		return "", fmt.Errorf("hashing password failed: %w", errors.WithStack(err))
+		return "", fmt.Errorf("hashing password failed: %w", err)
 	}
 	return PasswordHash(hash), nil
 }
