@@ -3,8 +3,6 @@ package timelines
 import (
 	"encoding/json"
 	"net/http"
-
-	"yatter-backend-go/app/handler/httperror"
 )
 
 func (h *handler) Public(w http.ResponseWriter, r *http.Request) {
@@ -12,19 +10,19 @@ func (h *handler) Public(w http.ResponseWriter, r *http.Request) {
 
 	cond, err := parseCondition(r.URL.Query())
 	if err != nil {
-		httperror.BadRequest(w, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	resp, err := h.app.Dao.Status().FindMany(ctx, cond)
 	if err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }

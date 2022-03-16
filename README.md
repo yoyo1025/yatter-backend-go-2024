@@ -140,19 +140,6 @@ r.Get("/{id}", func(w http.ResponseWriter, r *http.Request){
 })
 ```
 
-#### app/handler/httperror
-エラーレスポンスを返すためのユーティリティをまとめています。
-```
-func SomeHandler(w http.ResponseWriter, r *http.Request) {
-  ...
-  if err != nil {
-    httperror.InternalServerError(w, err)
-	return
-  }
-  ...
-}
-```
-
 #### app/handler/auth
 認証付きエンドポイントの実装のためのミドルウェア関数を提供しています。
 `chi.Mux#Use`や`chi.Mux#With`を用いて利用できます。

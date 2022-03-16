@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"yatter-backend-go/app/domain/object"
-	"yatter-backend-go/app/handler/httperror"
 )
 
 // Request body for `POST /v1/accounts`
@@ -20,30 +19,30 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 
 	var req AddRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		httperror.BadRequest(w, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	account := new(object.Account)
 	account.Username = req.Username
 	if err := account.SetPassword(req.Password); err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err := h.app.Dao.Account().Create(ctx, account)
 	if err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	account, err = h.app.Dao.Account().FindByUsername(ctx, account.Username)
 	if err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(account); err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
