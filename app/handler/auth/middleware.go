@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 	"yatter-backend-go/app/domain/object"
 )
 

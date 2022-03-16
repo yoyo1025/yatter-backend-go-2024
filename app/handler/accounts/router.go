@@ -2,8 +2,7 @@ package accounts
 
 import (
 	"net/http"
-
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 
 	"github.com/go-chi/chi/v5"
 )

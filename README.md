@@ -81,7 +81,7 @@ docker-compose up -d # 再起動
 ```
 .
 ├── app      ----> application core codes
-│   ├── app      ----> collection of dependency injected
+│   ├── app.go   ----> collection of dependency injected
 │   ├── config   ----> config
 │   ├── domain   ----> domain layer, core business logics
 │   ├── handler  ----> (interface layer & application layer), request handlers

@@ -19,15 +19,15 @@ type App struct {
 // Create dependency manager
 func NewApp() (*App, error) {
 	// panic if lacking something
-	app := new(App)
-	daoCfg := config.MySQLConfig()
 
-	var err error
-	if app.DB, err = dao.NewDB(daoCfg); err != nil {
+	db, err := dao.NewDB(config.MySQLConfig())
+	if err != nil {
 		return nil, err
 	}
-	app.AccountRepository = dao.NewAccount(app.DB)
-	app.StatusRepository = dao.NewStatus(app.DB)
 
-	return app, nil
+	return &App{
+		DB:                db,
+		AccountRepository: dao.NewAccount(db),
+		StatusRepository:  dao.NewStatus(db),
+	}, nil
 }

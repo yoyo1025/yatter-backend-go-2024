@@ -11,7 +11,7 @@ import (
 	"path"
 	"testing"
 
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 
 	"github.com/stretchr/testify/assert"
 )
