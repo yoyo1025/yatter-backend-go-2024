@@ -29,12 +29,12 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err := h.app.Dao.Account().Create(ctx, account)
+	err := h.app.AccountRepository.Create(ctx, account)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	account, err = h.app.Dao.Account().FindByUsername(ctx, account.Username)
+	account, err = h.app.AccountRepository.FindByUsername(ctx, account.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

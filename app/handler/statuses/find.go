@@ -17,7 +17,7 @@ func (h *handler) Find(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.app.Dao.Status().Find(ctx, id)
+	resp, err := h.app.StatusRepository.Find(ctx, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

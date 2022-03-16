@@ -27,7 +27,7 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 		Content:   req.Status,
 		AccountID: account.ID,
 	}
-	err := h.app.Dao.Status().Create(ctx, status)
+	err := h.app.StatusRepository.Create(ctx, status)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -63,13 +64,23 @@ func TestAccountRegistration(t *testing.T) {
 func setup(t *testing.T) *C {
 	app, err := app.NewApp()
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
-	if err := app.Dao.InitAll(); err != nil {
-		t.Fatal(err)
+	if _, err := app.DB.Exec("SET FOREIGN_KEY_CHECKS=0"); err != nil {
+		log.Fatalln(err)
 	}
+	defer func() {
+		if _, err := app.DB.Exec("SET FOREIGN_KEY_CHECKS=1"); err != nil {
+			log.Fatalln(err)
+		}
+	}()
 
+	for _, table := range []string{"account", "status"} {
+		if _, err := app.DB.Exec("TRUNCATE TABLE " + table); err != nil {
+			log.Fatalln(err)
+		}
+	}
 	server := httptest.NewServer(NewRouter(app))
 
 	return &C{

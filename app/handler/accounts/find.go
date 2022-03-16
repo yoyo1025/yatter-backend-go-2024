@@ -16,7 +16,7 @@ func (h *handler) Find(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.app.Dao.Account().FindByUsername(ctx, username)
+	resp, err := h.app.AccountRepository.FindByUsername(ctx, username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

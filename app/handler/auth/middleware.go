@@ -32,7 +32,7 @@ func Middleware(app *app.App) func(http.Handler) http.Handler {
 			}
 
 			username := pair[1]
-			if account, err := app.Dao.Account().FindByUsername(ctx, username); err != nil {
+			if account, err := app.AccountRepository.FindByUsername(ctx, username); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			} else if account == nil {
