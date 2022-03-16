@@ -3,14 +3,15 @@ package statuses
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
-	"yatter-backend-go/app/handler/request"
+	"github.com/go-chi/chi/v5"
 )
 
 func (h *handler) Find(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	id, err := request.IDOf(r)
+	id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
