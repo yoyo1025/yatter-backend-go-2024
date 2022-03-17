@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"strings"
 
-	"yatter-backend-go/app"
 	"yatter-backend-go/app/domain/object"
+	"yatter-backend-go/app/domain/repository"
 )
 
 var contextKey = new(struct{})
 
 // Auth by header
-func Middleware(app *app.App) func(http.Handler) http.Handler {
+func Middleware(ar repository.Account) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
@@ -32,7 +32,7 @@ func Middleware(app *app.App) func(http.Handler) http.Handler {
 			}
 
 			username := pair[1]
-			if account, err := app.AccountRepository.FindByUsername(ctx, username); err != nil {
+			if account, err := ar.FindByUsername(ctx, username); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			} else if account == nil {

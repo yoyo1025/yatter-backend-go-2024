@@ -14,7 +14,7 @@ func (h *handler) Public(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.app.StatusRepository.FindMany(ctx, cond)
+	resp, err := h.sr.FindMany(ctx, cond)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
