@@ -12,7 +12,7 @@ type DBConfig interface {
 }
 
 // Prepare sqlx.DB
-func initDb(config DBConfig) (*sqlx.DB, error) {
+func NewDB(config DBConfig) (*sqlx.DB, error) {
 	driverName := "mysql"
 	db, err := sqlx.Open(driverName, config.FormatDSN())
 	if err != nil {

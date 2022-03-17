@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"yatter-backend-go/app/handler/httperror"
-
 	"github.com/go-chi/chi/v5"
 )
 
@@ -18,20 +16,20 @@ func (h *handler) Find(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := h.app.Dao.Account().FindByUsername(ctx, username)
+	resp, err := h.app.AccountRepository.FindByUsername(ctx, username)
 	if err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if resp == nil {
-		httperror.Error(w, http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }

@@ -81,7 +81,7 @@ docker-compose up -d # 再起動
 ```
 .
 ├── app      ----> application core codes
-│   ├── app      ----> collection of dependency injected
+│   ├── app.go   ----> collection of dependency injected
 │   ├── config   ----> config
 │   ├── domain   ----> domain layer, core business logics
 │   ├── handler  ----> (interface layer & application layer), request handlers
@@ -128,30 +128,6 @@ DBなど外部モジュールへアクセスし、データの保存・取得・
 
 ### Utilities
 このテンプレートでは実装をサポートするユーティリティ関数を提供しています。
-
-#### app/handler/request
-リクエストの扱いに関するユーティリティをまとめています。
-テンプレートにはパスパラメータ`id`の読み取りを補助する関数`IDOf`を用意しています。
-```
-// var r *http.Mux
-r.Get("/{id}", func(w http.ResponseWriter, r *http.Request){
-  id, err := request.IDOf(r)
-  ...
-})
-```
-
-#### app/handler/httperror
-エラーレスポンスを返すためのユーティリティをまとめています。
-```
-func SomeHandler(w http.ResponseWriter, r *http.Request) {
-  ...
-  if err != nil {
-    httperror.InternalServerError(w, err)
-	return
-  }
-  ...
-}
-```
 
 #### app/handler/auth
 認証付きエンドポイントの実装のためのミドルウェア関数を提供しています。

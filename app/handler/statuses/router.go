@@ -3,7 +3,7 @@ package statuses
 import (
 	"net/http"
 
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 	"yatter-backend-go/app/handler/auth"
 
 	"github.com/go-chi/chi/v5"

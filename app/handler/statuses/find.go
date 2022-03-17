@@ -3,34 +3,34 @@ package statuses
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
-	"yatter-backend-go/app/handler/httperror"
-	"yatter-backend-go/app/handler/request"
+	"github.com/go-chi/chi/v5"
 )
 
 func (h *handler) Find(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	id, err := request.IDOf(r)
+	id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
-		httperror.BadRequest(w, err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	resp, err := h.app.Dao.Status().Find(ctx, id)
+	resp, err := h.app.StatusRepository.Find(ctx, id)
 	if err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	if resp == nil {
-		httperror.Error(w, http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
-		httperror.InternalServerError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
