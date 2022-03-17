@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 	"yatter-backend-go/app/handler/accounts"
 	"yatter-backend-go/app/handler/health"
 

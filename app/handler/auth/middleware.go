@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 	"yatter-backend-go/app/domain/object"
-	"yatter-backend-go/app/handler/httperror"
 )
 
 var contextKey = new(struct{})
@@ -22,22 +21,22 @@ func Middleware(app *app.App) func(http.Handler) http.Handler {
 			a := r.Header.Get("Authentication")
 			pair := strings.SplitN(a, " ", 2)
 			if len(pair) < 2 {
-				httperror.Error(w, http.StatusUnauthorized)
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
 
 			authType := pair[0]
 			if !strings.EqualFold(authType, "username") {
-				httperror.Error(w, http.StatusUnauthorized)
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
 
 			username := pair[1]
-			if account, err := app.Dao.Account().FindByUsername(ctx, username); err != nil {
-				httperror.InternalServerError(w, err)
+			if account, err := app.AccountRepository.FindByUsername(ctx, username); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			} else if account == nil {
-				httperror.Error(w, http.StatusUnauthorized)
+				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			} else {
 				next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), contextKey, account)))

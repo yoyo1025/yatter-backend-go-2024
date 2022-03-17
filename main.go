@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"yatter-backend-go/app/app"
+	"yatter-backend-go/app"
 	"yatter-backend-go/app/config"
 	"yatter-backend-go/app/handler"
 )
