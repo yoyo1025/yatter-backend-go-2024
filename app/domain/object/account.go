@@ -2,6 +2,7 @@ package object
 
 import (
 	"fmt"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -34,7 +35,7 @@ type (
 		Note *string `json:"note,omitempty"`
 
 		// The time the account was created
-		CreateAt DateTime `json:"create_at,omitempty" db:"create_at"`
+		CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
 	}
 )
 

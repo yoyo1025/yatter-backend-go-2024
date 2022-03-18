@@ -4,8 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"yatter-backend-go/app"
+	"yatter-backend-go/app/domain/repository"
 	"yatter-backend-go/app/handler/accounts"
+	"yatter-backend-go/app/handler/auth"
 	"yatter-backend-go/app/handler/health"
 	"yatter-backend-go/app/handler/statuses"
 	"yatter-backend-go/app/handler/timelines"
@@ -15,7 +16,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func NewRouter(app *app.App) http.Handler {
+func NewRouter(ar repository.Account, sr repository.Status) http.Handler {
 	r := chi.NewRouter()
 
 	// A good base middleware stack
@@ -30,9 +31,9 @@ func NewRouter(app *app.App) http.Handler {
 	// processing should be stopped.
 	r.Use(middleware.Timeout(60 * time.Second))
 
-	r.Mount("/v1/accounts", accounts.NewRouter(app))
-	r.Mount("/v1/statuses", statuses.NewRouter(app))
-	r.Mount("/v1/timelines", timelines.NewRouter(app))
+	r.Mount("/v1/accounts", accounts.NewRouter(ar))
+	r.Mount("/v1/statuses", statuses.NewRouter(auth.Middleware(ar), sr))
+	r.Mount("/v1/timelines", timelines.NewRouter(sr))
 	r.Mount("/v1/health", health.NewRouter())
 
 	return r

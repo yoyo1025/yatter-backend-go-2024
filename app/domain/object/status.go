@@ -1,5 +1,7 @@
 package object
 
+import "time"
+
 type (
 	StatusID = int64
 
@@ -18,8 +20,7 @@ type (
 		Content string `json:"content,omitempty"`
 
 		// The time the status was created
-		// Format: date-time
-		CreateAt DateTime `json:"create_at,omitempty" db:"create_at"`
+		CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
 	}
 
 	FindStatusCondition struct {

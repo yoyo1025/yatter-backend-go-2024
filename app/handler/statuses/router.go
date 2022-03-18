@@ -2,23 +2,21 @@ package statuses
 
 import (
 	"net/http"
-
-	"yatter-backend-go/app"
-	"yatter-backend-go/app/handler/auth"
+	"yatter-backend-go/app/domain/repository"
 
 	"github.com/go-chi/chi/v5"
 )
 
 type handler struct {
-	app *app.App
+	sr repository.Status
 }
 
-func NewRouter(app *app.App) http.Handler {
+func NewRouter(am func(http.Handler) http.Handler, sr repository.Status) http.Handler {
 	r := chi.NewRouter()
 
-	h := &handler{app: app}
+	h := &handler{sr}
 	r.Get("/{id}", h.Find)
-	r.With(auth.Middleware(app)).Post("/", h.Create)
+	r.With(am).Post("/", h.Create)
 
 	return r
 }
