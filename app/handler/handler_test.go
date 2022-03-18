@@ -11,7 +11,8 @@ import (
 	"path"
 	"testing"
 
-	"yatter-backend-go/app"
+	"yatter-backend-go/app/config"
+	"yatter-backend-go/app/dao"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -62,35 +63,35 @@ func TestAccountRegistration(t *testing.T) {
 }
 
 func setup(t *testing.T) *C {
-	app, err := app.NewApp()
+	db, err := dao.NewDB(config.MySQLConfig())
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if _, err := app.DB.Exec("SET FOREIGN_KEY_CHECKS=0"); err != nil {
+	if _, err := db.Exec("SET FOREIGN_KEY_CHECKS=0"); err != nil {
 		log.Fatalln(err)
 	}
 	defer func() {
-		if _, err := app.DB.Exec("SET FOREIGN_KEY_CHECKS=1"); err != nil {
+		if _, err := db.Exec("SET FOREIGN_KEY_CHECKS=1"); err != nil {
 			log.Fatalln(err)
 		}
 	}()
 
 	for _, table := range []string{"account"} {
-		if _, err := app.DB.Exec("TRUNCATE TABLE " + table); err != nil {
+		if _, err := db.Exec("TRUNCATE TABLE " + table); err != nil {
 			log.Fatalln(err)
 		}
 	}
-	server := httptest.NewServer(NewRouter(app))
+	server := httptest.NewServer(NewRouter(
+		dao.NewAccount(db), dao.NewStatus(db),
+	))
 
 	return &C{
-		App:    app,
 		Server: server,
 	}
 }
 
 type C struct {
-	App    *app.App
 	Server *httptest.Server
 }
 

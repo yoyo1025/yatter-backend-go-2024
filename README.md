@@ -81,7 +81,6 @@ docker-compose up -d # 再起動
 ```
 .
 ├── app      ----> application core codes
-│   ├── app.go   ----> collection of dependency injected
 │   ├── config   ----> config
 │   ├── domain   ----> domain layer, core business logics
 │   ├── handler  ----> (interface layer & application layer), request handlers
@@ -89,10 +88,6 @@ docker-compose up -d # 再起動
 │
 └── ddl      ----> DB definition master
 ```
-
-#### app
-モジュールの依存関係を整理するパッケージで、DIコンテナを扱います。
-今回は簡素なものになっていて、DAOの組み立てとhandlerのDAO（が提供するdomain/repository）への依存の管理のみ行っています。
 
 #### config
 サーバーの設定をまとめたパッケージです。DBやlistenするポートなどの設定を取得するAPIがまとめてあります。
