@@ -25,30 +25,30 @@
 
 ### Start
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Shutdown
 ```
-docker-compose down
+docker compose down
 ```
 
 ### Log
 ```
 # ログの確認
-docker-compose logs
+docker compose logs
 
 # ストリーミング
-docker-compose logs -f
+docker compose logs -f
 
 # webサーバonly
-docker-compose logs web
-docker-compose logs -f web
+docker compose logs web
+docker compose logs -f web
 ```
 
 ### Hot Reload
 [air](https://github.com/cosmtrek/air)によるホットリロードをサポートしており、コードを編集・保存すると自動で反映されます。
-読み込まれない場合は`docker-compose restart`を実行してください。
+読み込まれない場合は`docker compose restart`を実行してください。
 
 ### Swagger UI
 API仕様をSwagger UIで確認できます。
@@ -71,9 +71,9 @@ API仕様をSwagger UIで確認できます。
 初回起動時に`ddl/`以下にあるSQLファイルが実行されます。
 再読み込みの際は`.data/mysql/`を削除し、DBを初期化してください。
 ```
-docker-compose down  # 開発環境が稼働中なら止める
+docker compose down  # 開発環境が稼働中なら止める
 rm -rfd .data/mysql  # `.data/mysql/`以下を削除
-docker-compose up -d # 再起動
+docker compose up -d # 再起動
 ```
 
 ## Code
