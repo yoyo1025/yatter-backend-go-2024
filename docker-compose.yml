@@ -26,8 +26,12 @@ services:
       - "./.data/go-pkg:/go/pkg/mod/cache"
     ports:
       - "8080:8080"
-    env_file:
-      - docker-compose-default.env
+    environment:
+      ENV: Development
+      MYSQL_DATABASE: yatter
+      MYSQL_USER: yatter
+      MYSQL_PASSWORD: yatter
+      MYSQL_HOST: "mysql:3306"
     depends_on:
       - mysql
     healthcheck:
