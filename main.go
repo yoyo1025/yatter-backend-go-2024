@@ -20,6 +20,7 @@ func serve(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 
 	addr := ":" + strconv.Itoa(config.Port())
 	log.Printf("Serve on http://%s", addr)
