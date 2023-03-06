@@ -315,35 +315,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Media"
-  /media/description:
-    post:
-      tags:
-        - media
-      summary: post media description
-      description: ""
-      operationId: addMediaDescription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                media_id:
-                  description: identify uploaded file
-                  type: integer
-                  example: 123
-                description:
-                  description: uploaded file description
-                  type: string
-                  example: "hoge hoge"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DescriptionAttachedMedia"
-
   /statuses:
     post:
       security:
@@ -552,10 +523,6 @@ components:
           type: integer
           description: an identifier related uploaded file
           example: 123
-        media_url:
-          type: string
-          description: URL of uploaded file
-          example: "https://dummyimage.com/600x800"
         description:
           description: uploaded file description
           type: string
