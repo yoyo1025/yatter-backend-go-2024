@@ -199,7 +199,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Account"
+                  $ref: "#/components/schemas/AccountForFF"
   "/accounts/{username}/followers":
     get:
       tags:
@@ -240,7 +240,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Account"
+                  $ref: "#/components/schemas/AccountForFF"
   "/accounts/{username}/unfollow":
     post:
       security:
@@ -288,7 +288,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Relationship"
+                  $ref: "#/components/schemas/RelationshipWithUUID"
   /media:
     post:
       tags:
@@ -438,7 +438,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Status"
+                  $ref: "#/components/schemas/StatusForTimeline"
   /timelines/public:
     get:
       tags:
@@ -494,6 +494,58 @@ components:
         header:
           type: string
           description: URL to the header image
+    AccountForFF:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: The internal unique ID for iOS/Android
+          example: 86f30d01-5ca8-3544-d5f2-30f7f6dfc37d
+        username:
+          type: string
+          description: The username of the account
+          example: john
+        display_name:
+          type: string
+          description: The account's display name
+          example: ジョン
+        create_at:
+          type: string
+          format: date-time
+          description: The time the account was created
+        followers_count:
+          type: integer
+          description: The number of followers for the account
+          example: 52
+        following_count:
+          type: integer
+          description: The number of accounts the given account is following
+          example: 128
+        note:
+          type: string
+          description: Biography of user
+        avatar:
+          type: string
+          description: URL to the avatar image
+        header:
+          type: string
+          description: URL to the header image
+    RelationshipWithUUID:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: internal uuid for Android/iOS
+          example: 4f875a5f-b8a0-4598-77c7-018472936573
+        id:
+          type: integer
+          description: Target account id
+        following:
+          type: boolean
+          description: Whether the user is currently following the account
+        followed_by:
+          type: boolean
+          description: Whether the user is currently being followed by the account
     Relationship:
       type: object
       properties:
@@ -548,6 +600,32 @@ components:
     Status:
       type: object
       properties:
+        id:
+          type: integer
+          description: The ID of the status
+          example: 123
+        account:
+          $ref: "#/components/schemas/Account"
+        content:
+          type: string
+          description: Body of the status; this will contain HTML (remote HTML already sanitized)
+          example: ピタ ゴラ スイッチ♪
+        create_at:
+          type: string
+          format: date-time
+          description: The time the status was created
+        media_attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/DescriptionAttachedMedia"
+
+    StatusForTimeline:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: The internal unique ID for iOS/Android
+          example: 86f30d01-5ca8-3544-d5f2-30f7f6dfc37d
         id:
           type: integer
           description: The ID of the status
