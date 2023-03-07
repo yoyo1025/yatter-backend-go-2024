@@ -407,7 +407,8 @@ paths:
             timelines only)
           required: false
           schema:
-            type: integer
+            type: boolean
+            example: false
         - &a2
           name: max_id
           in: query
