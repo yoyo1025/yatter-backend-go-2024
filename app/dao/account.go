@@ -32,7 +32,7 @@ func (r *account) FindByUsername(ctx context.Context, username string) (*object.
 			return nil, nil
 		}
 
-		return nil, fmt.Errorf("%w", err)
+		return nil, fmt.Errorf("failed to find account from db: %w", err)
 	}
 
 	return entity, nil
