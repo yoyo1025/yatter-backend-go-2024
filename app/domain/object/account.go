@@ -8,13 +8,10 @@ import (
 )
 
 type (
-	AccountID    = int64
-	PasswordHash = string
-
 	// Account account
 	Account struct {
 		// The internal ID of the account
-		ID AccountID `json:"-"`
+		ID int64 `json:"-"`
 
 		// The username of the account
 		Username string `json:"username,omitempty"`
@@ -54,10 +51,10 @@ func (a *Account) SetPassword(pass string) error {
 	return nil
 }
 
-func generatePasswordHash(pass string) (PasswordHash, error) {
+func generatePasswordHash(pass string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
 		return "", fmt.Errorf("hashing password failed: %w", err)
 	}
-	return PasswordHash(hash), nil
+	return string(hash), nil
 }
