@@ -12,7 +12,7 @@ func NewRouter() http.HandlerFunc {
 		_, err := w.Write([]byte("OK"))
 		if err != nil {
 			// レスポンスボディの書き込みに失敗している かつ ステータスコードはレスポンスボディ書き込み後に変更できないのでログにエラーを出す
-			fmt.Printf("failed to write response body: %v\n", err)
+			fmt.Printf("health check: failed to write response body: %v\n", err)
 		}
 	}
 }
