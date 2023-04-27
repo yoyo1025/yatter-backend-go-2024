@@ -7,34 +7,35 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type (
-	// Account account
-	Account struct {
-		// The internal ID of the account
-		ID int64 `json:"id,omitempty"`
+// 本当はPasswordHashがハッシュされたパスワードであることを型で保証したい。
+// ハッシュ化されたパスワード用の型を用意してstringと区別して管理すると良い。
+// 今回は簡単のためstringで管理している。
 
-		// The username of the account
-		Username string `json:"username,omitempty"`
+type Account struct {
+	// The internal ID of the account
+	ID int64 `json:"id,omitempty"`
 
-		// The username of the account
-		PasswordHash string `json:"-" db:"password_hash"`
+	// The username of the account
+	Username string `json:"username,omitempty"`
 
-		// The account's display name
-		DisplayName *string `json:"display_name,omitempty" db:"display_name"`
+	// The username of the account
+	PasswordHash string `json:"-" db:"password_hash"`
 
-		// URL to the avatar image
-		Avatar *string `json:"avatar,omitempty"`
+	// The account's display name
+	DisplayName *string `json:"display_name,omitempty" db:"display_name"`
 
-		// URL to the header image
-		Header *string `json:"header,omitempty"`
+	// URL to the avatar image
+	Avatar *string `json:"avatar,omitempty"`
 
-		// Biography of user
-		Note *string `json:"note,omitempty"`
+	// URL to the header image
+	Header *string `json:"header,omitempty"`
 
-		// The time the account was created
-		CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
-	}
-)
+	// Biography of user
+	Note *string `json:"note,omitempty"`
+
+	// The time the account was created
+	CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
+}
 
 // Check if given password is match to account's password
 func (a *Account) CheckPassword(pass string) bool {
