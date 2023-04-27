@@ -601,4 +601,4 @@ components:
         media_attachments:
           type: array
           items:
-            $ref: "#/components/schemas/DescriptionAttachedMedia"
+            $ref: "#/components/schemas/Attachment"
