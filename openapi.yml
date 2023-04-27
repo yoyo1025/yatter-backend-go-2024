@@ -337,7 +337,7 @@ paths:
                 medias:
                   type: array
                   items:
-                    $ref: "#/components/schemas/DescriptionAttachedMedia"
+                    $ref: "#/components/schemas/AttachmentRequest"
         required: true
       responses:
         "200":
@@ -553,7 +553,7 @@ components:
           type: string
           description: URL of uploaded image
           example: "https://dummyimage.com/600x800"
-    DescriptionAttachedMedia:
+    AttachmentRequest:
       type: object
       properties:
         media_id:
