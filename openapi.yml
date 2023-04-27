@@ -438,7 +438,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/StatusForTimeline"
+                  $ref: "#/components/schemas/Status"
   /timelines/public:
     get:
       tags:
@@ -582,28 +582,6 @@ components:
           type: string
           description: A description of the image for the visually impaired (maximum 420 characters), or `null` if none provided
     Status:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the status
-          example: 123
-        account:
-          $ref: "#/components/schemas/Account"
-        content:
-          type: string
-          description: Body of the status; this will contain HTML (remote HTML already sanitized)
-          example: ピタ ゴラ スイッチ♪
-        create_at:
-          type: string
-          format: date-time
-          description: The time the status was created
-        media_attachments:
-          type: array
-          items:
-            $ref: "#/components/schemas/DescriptionAttachedMedia"
-
-    StatusForTimeline:
       type: object
       properties:
         id:
