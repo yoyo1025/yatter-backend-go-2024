@@ -7,37 +7,35 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type (
-	AccountID    = int64
-	PasswordHash = string
+// 本当はPasswordHashがハッシュされたパスワードであることを型で保証したい。
+// ハッシュ化されたパスワード用の型を用意してstringと区別して管理すると良い。
+// 今回は簡単のためstringで管理している。
 
-	// Account account
-	Account struct {
-		// The internal ID of the account
-		ID AccountID `json:"-"`
+type Account struct {
+	// The internal ID of the account
+	ID int64 `json:"id,omitempty"`
 
-		// The username of the account
-		Username string `json:"username,omitempty"`
+	// The username of the account
+	Username string `json:"username,omitempty"`
 
-		// The username of the account
-		PasswordHash string `json:"-" db:"password_hash"`
+	// The username of the account
+	PasswordHash string `json:"-" db:"password_hash"`
 
-		// The account's display name
-		DisplayName *string `json:"display_name,omitempty" db:"display_name"`
+	// The account's display name
+	DisplayName *string `json:"display_name,omitempty" db:"display_name"`
 
-		// URL to the avatar image
-		Avatar *string `json:"avatar,omitempty"`
+	// URL to the avatar image
+	Avatar *string `json:"avatar,omitempty"`
 
-		// URL to the header image
-		Header *string `json:"header,omitempty"`
+	// URL to the header image
+	Header *string `json:"header,omitempty"`
 
-		// Biography of user
-		Note *string `json:"note,omitempty"`
+	// Biography of user
+	Note *string `json:"note,omitempty"`
 
-		// The time the account was created
-		CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
-	}
-)
+	// The time the account was created
+	CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
+}
 
 // Check if given password is match to account's password
 func (a *Account) CheckPassword(pass string) bool {
@@ -54,10 +52,10 @@ func (a *Account) SetPassword(pass string) error {
 	return nil
 }
 
-func generatePasswordHash(pass string) (PasswordHash, error) {
+func generatePasswordHash(pass string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if err != nil {
 		return "", fmt.Errorf("hashing password failed: %w", err)
 	}
-	return PasswordHash(hash), nil
+	return string(hash), nil
 }
