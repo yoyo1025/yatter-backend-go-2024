@@ -199,7 +199,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Followers"
+                  $ref: "#/components/schemas/Account"
   "/accounts/{username}/followers":
     get:
       tags:
@@ -240,7 +240,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Followers"
+                  $ref: "#/components/schemas/Account"
   "/accounts/{username}/unfollow":
     post:
       security:
@@ -463,38 +463,6 @@ components:
       in: header
   schemas:
     Account:
-      type: object
-      properties:
-        username:
-          type: string
-          description: The username of the account
-          example: john
-        display_name:
-          type: string
-          description: The account's display name
-          example: ジョン
-        create_at:
-          type: string
-          format: date-time
-          description: The time the account was created
-        followers_count:
-          type: integer
-          description: The number of followers for the account
-          example: 52
-        following_count:
-          type: integer
-          description: The number of accounts the given account is following
-          example: 128
-        note:
-          type: string
-          description: Biography of user
-        avatar:
-          type: string
-          description: URL to the avatar image
-        header:
-          type: string
-          description: URL to the header image
-    Followers:
       type: object
       properties:
         id:
