@@ -132,7 +132,7 @@ paths:
         - accounts
       summary: Fetching an account
       description: ""
-      operationId: findAccountByID
+      operationId: findAccountByUsername
       parameters:
         - name: username
           in: path
@@ -199,7 +199,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Followers"
+                  $ref: "#/components/schemas/Account"
   "/accounts/{username}/followers":
     get:
       tags:
@@ -240,7 +240,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Followers"
+                  $ref: "#/components/schemas/Account"
   "/accounts/{username}/unfollow":
     post:
       security:
@@ -337,7 +337,7 @@ paths:
                 medias:
                   type: array
                   items:
-                    $ref: "#/components/schemas/DescriptionAttachedMedia"
+                    $ref: "#/components/schemas/AttachmentRequest"
         required: true
       responses:
         "200":
@@ -438,7 +438,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/StatusForTimeline"
+                  $ref: "#/components/schemas/Status"
   /timelines/public:
     get:
       tags:
@@ -463,38 +463,6 @@ components:
       in: header
   schemas:
     Account:
-      type: object
-      properties:
-        username:
-          type: string
-          description: The username of the account
-          example: john
-        display_name:
-          type: string
-          description: The account's display name
-          example: ジョン
-        create_at:
-          type: string
-          format: date-time
-          description: The time the account was created
-        followers_count:
-          type: integer
-          description: The number of followers for the account
-          example: 52
-        following_count:
-          type: integer
-          description: The number of accounts the given account is following
-          example: 128
-        note:
-          type: string
-          description: Biography of user
-        avatar:
-          type: string
-          description: URL to the avatar image
-        header:
-          type: string
-          description: URL to the header image
-    Followers:
       type: object
       properties:
         id:
@@ -553,7 +521,7 @@ components:
           type: string
           description: URL of uploaded image
           example: "https://dummyimage.com/600x800"
-    DescriptionAttachedMedia:
+    AttachmentRequest:
       type: object
       properties:
         media_id:
@@ -601,26 +569,4 @@ components:
         media_attachments:
           type: array
           items:
-            $ref: "#/components/schemas/DescriptionAttachedMedia"
-
-    StatusForTimeline:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the status
-          example: 123
-        account:
-          $ref: "#/components/schemas/Account"
-        content:
-          type: string
-          description: Body of the status; this will contain HTML (remote HTML already sanitized)
-          example: ピタ ゴラ スイッチ♪
-        create_at:
-          type: string
-          format: date-time
-          description: The time the status was created
-        media_attachments:
-          type: array
-          items:
-            $ref: "#/components/schemas/DescriptionAttachedMedia"
+            $ref: "#/components/schemas/Attachment"
