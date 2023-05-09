@@ -132,7 +132,7 @@ paths:
         - accounts
       summary: Fetching an account
       description: ""
-      operationId: findAccountByID
+      operationId: findAccountByUsername
       parameters:
         - name: username
           in: path
