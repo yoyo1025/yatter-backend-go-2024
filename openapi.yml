@@ -92,9 +92,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  msg:
+                  username:
                     type: string
-                    example: "Success"
+                    example: "john"
         "401":
           description: Unauthorized
           content:
