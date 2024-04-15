@@ -1,5 +1,5 @@
 # dev
-FROM golang:1.18-bullseye AS dev
+FROM golang:1.22-bullseye AS dev
 WORKDIR /work/yatter-backend-go
 RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
