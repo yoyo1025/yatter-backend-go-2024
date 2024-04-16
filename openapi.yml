@@ -514,6 +514,7 @@ components:
           type: integer
           description: Account ID
           example: 0
+          x-faker: datatype.number
         username:
           type: string
           description: The username of the account
@@ -530,10 +531,12 @@ components:
           type: integer
           description: The number of followers for the account
           example: 52
+          x-faker: datatype.number
         following_count:
           type: integer
           description: The number of accounts the given account is following
           example: 128
+          x-faker: datatype.number
         note:
           type: string
           description: Biography of user
@@ -549,6 +552,7 @@ components:
         id:
           type: integer
           description: Target account id
+          x-faker: datatype.number
         following:
           type: boolean
           description: Whether the user is currently following the account
@@ -584,13 +588,17 @@ components:
           type: integer
           description: ID of the attachment
           example: 123
+          x-faker: datatype.number
         type:
           type: string
           description: 'One of: "image", "video", "gifv", "unknown"'
           example: "image"
+          x-faker:
+            helpers.arrayElement: [[image]]
         url:
           type: string
           description: URL of the image
+          x-faker: image.imageUrl
         description:
           type: string
           description: A description of the image for the visually impaired (maximum 420 characters), or `null` if none provided
@@ -601,12 +609,14 @@ components:
           type: integer
           description: The ID of the status
           example: 123
+          x-faker: datatype.number
         account:
           $ref: "#/components/schemas/Account"
         content:
           type: string
           description: Body of the status; this will contain HTML (remote HTML already sanitized)
           example: ピタ ゴラ スイッチ♪
+          x-faker: lorem.paragraph
         create_at:
           type: string
           format: date-time
