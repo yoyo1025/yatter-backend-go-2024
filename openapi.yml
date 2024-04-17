@@ -543,7 +543,7 @@ components:
         avatar:
           type: string
           description: URL to the avatar image
-          x-faker: image.imageUrl
+          x-faker: image.avatar
         header:
           type: string
           description: URL to the header image
@@ -600,7 +600,8 @@ components:
         url:
           type: string
           description: URL of the image
-          x-faker: image.imageUrl
+          x-faker:
+            image.image: [640, 480, true]
         description:
           type: string
           description: A description of the image for the visually impaired (maximum 420 characters), or `null` if none provided
