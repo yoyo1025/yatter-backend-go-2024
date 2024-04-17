@@ -543,9 +543,11 @@ components:
         avatar:
           type: string
           description: URL to the avatar image
+          x-faker: image.imageUrl
         header:
           type: string
           description: URL to the header image
+          x-faker: image.imageUrl
     Relationship:
       type: object
       properties:
