@@ -18,16 +18,18 @@ type Status interface {
 }
 
 type status struct {
-	db   *sqlx.DB
-	repo repository.Status
+	db          *sqlx.DB
+	statusRepo  repository.Status
+	accountRepo repository.Account
 }
 
 var _ Status = (*status)(nil)
 
-func NewStatus(db *sqlx.DB, repo repository.Status) *status {
+func NewStatus(db *sqlx.DB, statusRepo repository.Status, accountRepo repository.Account) *status {
 	return &status{
-		db:   db,
-		repo: repo,
+		db:          db,
+		statusRepo:  statusRepo,
+		accountRepo: accountRepo,
 	}
 }
 
@@ -56,7 +58,7 @@ func (s *status) Create(ctx context.Context, status string) (*CreateStatusDTO, e
 	}()
 
 	st := object.NewStatus(status)
-	st, err = s.repo.Create(ctx, tx, acc, st)
+	st, err = s.statusRepo.Create(ctx, tx, acc, st)
 	if err != nil {
 		return nil, err
 	}
@@ -73,14 +75,14 @@ type GetStatusDTO struct {
 }
 
 func (s *status) Get(ctx context.Context, statusID string) (*GetStatusDTO, error) {
-	acc := auth.AccountOf(ctx)
-	if acc == nil {
-		return nil, errors.New("authorized account is not found")
-	}
-
 	sid, err := strconv.Atoi(statusID)
 
-	st, err := s.repo.Get(ctx, sid)
+	st, err := s.statusRepo.Get(ctx, sid)
+	if err != nil {
+		return nil, err
+	}
+
+	acc, err := s.accountRepo.FindByID(ctx, st.AccountID)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +112,7 @@ func (s *status) ListPublicStatuses(ctx context.Context, maxID, sinceID, limit s
 		lim = 40
 	}
 
-	statuses, err := s.repo.List(ctx, acc, mid, sid, lim)
+	statuses, err := s.statusRepo.List(ctx, acc, mid, sid, lim)
 	if err != nil {
 		return nil, err
 	}

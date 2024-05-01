@@ -15,10 +15,20 @@ func NewRouter(su usecase.Status, ar repository.Account) http.Handler {
 	h := NewHandler(su)
 
 	m := auth.Middleware(ar)
+	r.With(m).Post("/", h.PostStatus)
+	r.Get("/{status_id}", h.GetStatus)
+
+	return r
+}
+
+func NewTimelineRouter(su usecase.Status, ar repository.Account) http.Handler {
+	r := chi.NewRouter()
+
+	h := NewHandler(su)
+
+	m := auth.Middleware(ar)
 	r.Use(m)
-	r.Post("/v1/statuses/", h.PostStatus)
-	r.Get("/v1/statuses/{status_id}", h.GetStatus)
-	r.Get("/v1/timelines/public", h.GetTimelineStatuses)
+	r.Get("/public", h.GetTimelineStatuses)
 
 	return r
 }

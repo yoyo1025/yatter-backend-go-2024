@@ -19,8 +19,8 @@ func NewRouter(u usecase.Account) http.Handler {
 	h := &handler{
 		accountUsecase: u,
 	}
-	r.Post("/accounts/", h.Create)
-	r.Get("/accounts/{username}", h.Get)
+	r.Post("/", h.Create)
+	r.Get("/{username}", h.Get)
 
 	return r
 }
