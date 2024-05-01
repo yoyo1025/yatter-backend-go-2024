@@ -37,6 +37,17 @@ type Account struct {
 	CreateAt time.Time `json:"create_at,omitempty" db:"create_at"`
 }
 
+func NewAccount(username, password string) (*Account, error) {
+	account := &Account{
+		Username: username,
+		CreateAt: time.Now(),
+	}
+	if err := account.SetPassword(password); err != nil {
+		return nil, fmt.Errorf("set password error: %w", err)
+	}
+	return account, nil
+}
+
 // Check if given password is match to account's password
 func (a *Account) CheckPassword(pass string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(a.PasswordHash), []byte(pass)) == nil

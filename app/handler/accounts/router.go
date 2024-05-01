@@ -2,22 +2,25 @@ package accounts
 
 import (
 	"net/http"
-	"yatter-backend-go/app/domain/repository"
+	"yatter-backend-go/app/usecase"
 
 	"github.com/go-chi/chi/v5"
 )
 
 // Implementation of handler
 type handler struct {
-	ar repository.Account
+	accountUsecase usecase.Account
 }
 
 // Create Handler for `/v1/accounts/`
-func NewRouter(ar repository.Account) http.Handler {
+func NewRouter(u usecase.Account) http.Handler {
 	r := chi.NewRouter()
 
-	h := &handler{ar}
-	r.Post("/", h.Create)
+	h := &handler{
+		accountUsecase: u,
+	}
+	r.Post("/accounts/", h.Create)
+	r.Get("/accounts/{username}", h.Get)
 
 	return r
 }
