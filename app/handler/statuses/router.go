@@ -13,7 +13,7 @@ type handler struct {
 	ar repository.Account
 }
 
-// Create Handler for `/v1/accounts/`
+// Create Handler for `/v1/statuses/`
 func NewRouter(ar repository.Account) http.Handler {
 	r := chi.NewRouter()
 
