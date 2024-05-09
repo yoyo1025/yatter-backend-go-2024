@@ -17,6 +17,6 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 
 	account_info := auth.AccountOf(r) // 認証情報を取得する
 
-	panic(fmt.Sprintf("Must Implement Status Creation And Acount Info %v", account_info))
+	panic(fmt.Sprintf("Must Implement Status Creation And Check Acount Info %v", account_info))
 
 }
