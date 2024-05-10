@@ -134,3 +134,16 @@ DBなど外部モジュールへアクセスし、データの保存・取得・
 // var r *http.Request
 account := auth.AccountOf(r)
 ```
+
+r.Group()により、特定のグループに対してミドルウェアを適用することができます。
+グループに対して適用されたミドルウェアは、そのグループに属する全てのエンドポイントに対して適用されます。
+```
+r := chi.NewRouter()
+
+r.Group(func(r chi.Router) {
+	// リクエストの認証を行う
+	r.Use(auth.Middleware(ar))
+	h := &handler{ar}
+	r.Post("/", h.Create)
+})
+```
