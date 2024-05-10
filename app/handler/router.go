@@ -8,6 +8,7 @@ import (
 	"yatter-backend-go/app/handler/accounts"
 	"yatter-backend-go/app/handler/auth"
 	"yatter-backend-go/app/handler/health"
+	"yatter-backend-go/app/handler/statuses"
 	"yatter-backend-go/app/usecase"
 
 	"github.com/go-chi/chi/v5"
@@ -31,6 +32,7 @@ func NewRouter(au usecase.Account, ar repository.Account) http.Handler {
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	r.Mount("/v1/accounts", accounts.NewRouter(au))
+	r.Mount("/v1/statuses", statuses.NewRouter(ar))
 	r.Mount("/v1/health", health.NewRouter())
 	r.Mount("/v1/auth", auth.NewRouter(ar))
 
