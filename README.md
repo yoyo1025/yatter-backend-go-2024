@@ -139,10 +139,10 @@ r.Group()により、特定のグループに対してミドルウェアを適�
 ```
 r := chi.NewRouter()
 
-	r.Group(func(r chi.Router) {
-		// リクエストの認証を行う
-		r.Use(auth.Middleware(ar))
-		h := &handler{ar}
-		r.Post("/", h.Create)
-	})
+r.Group(func(r chi.Router) {
+	// リクエストの認証を行う
+	r.Use(auth.Middleware(ar))
+	h := &handler{ar}
+	r.Post("/", h.Create)
+})
 ```
