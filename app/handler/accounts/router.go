@@ -20,7 +20,6 @@ func NewRouter(u usecase.Account) http.Handler {
 		accountUsecase: u,
 	}
 	r.Post("/", h.Create)
-	r.Get("/{username}", h.Get)
 
 	return r
 }

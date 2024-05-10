@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"strconv"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
@@ -11,7 +10,6 @@ import (
 
 type Account interface {
 	Create(ctx context.Context, username, password string) (*CreateAccountDTO, error)
-	Get(ctx context.Context, id string) (*GetAccountDTO, error)
 }
 
 type account struct {
@@ -60,22 +58,6 @@ func (a *account) Create(ctx context.Context, username, password string) (*Creat
 	}
 
 	return &CreateAccountDTO{
-		Account: acc,
-	}, nil
-}
-
-func (a *account) Get(ctx context.Context, id string) (*GetAccountDTO, error) {
-	i, err := strconv.Atoi(id)
-	if err != nil {
-		return nil, err
-	}
-
-	acc, err := a.accountRepo.FindByID(ctx, i)
-	if err != nil {
-		return nil, err
-	}
-
-	return &GetAccountDTO{
 		Account: acc,
 	}, nil
 }
