@@ -37,6 +37,8 @@ tags:
     externalDocs:
       description: Find out more
       url: http://example.com
+x-json-schema-faker:
+  fillProperties: false # https://docs.stoplight.io/docs/prism/9528b5a8272c0-dynamic-response-generation-with-faker#fill-or-additional-properties
 paths:
   /health:
     head:
