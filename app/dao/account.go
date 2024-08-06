@@ -18,6 +18,7 @@ type (
 	}
 )
 
+// インターフェースの実装チェック
 var _ repository.Account = (*account)(nil)
 
 // Create accout repository
@@ -40,6 +41,7 @@ func (a *account) FindByUsername(ctx context.Context, username string) (*object.
 	return entity, nil
 }
 
+// repositoryのインターフェースを実装しているだけでdaoはrepositoryに依存しているわけではない？インターフェースを用いた依存はしている。
 func (a *account) Create(ctx context.Context, tx *sqlx.Tx, acc *object.Account) error {
 	_, err := a.db.Exec("insert into account (username, password_hash, display_name, avatar, header, note, create_at) values (?, ?, ?, ?, ?, ?, ?)",
 		acc.Username, acc.PasswordHash, acc.DisplayName, acc.Avatar, acc.Header, acc.Note, acc.CreateAt)

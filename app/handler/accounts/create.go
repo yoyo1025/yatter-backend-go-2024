@@ -21,6 +21,7 @@ func (h *handler) Create(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
+	// accountUsecaseを使っているためusecaseに依存していることがわかる
 	dto, err := h.accountUsecase.Create(ctx, req.Username, req.Password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -52,7 +52,7 @@ func (a *account) Create(ctx context.Context, username, password string) (*Creat
 
 		tx.Commit()
 	}()
-
+	// accountRepoを使用していることから、usecaseはRepoに依存していることがわかる
 	if err := a.accountRepo.Create(ctx, tx, acc); err != nil {
 		return nil, err
 	}
