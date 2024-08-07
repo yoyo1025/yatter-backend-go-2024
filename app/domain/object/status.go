@@ -18,6 +18,11 @@ type StatusDetail struct {
 	// MediaAttachments Attachment
 }
 
+type StatusRequest struct {
+	Status string `json:"string,omitempty"`
+	Medias []Media
+}
+
 func NewStatus(content string) *Status {
 	return &Status{
 		Content:  content,
