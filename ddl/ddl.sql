@@ -18,3 +18,11 @@ CREATE TABLE `status` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `account`(`id`) ON DELETE CASCADE
 );
+
+CREATE TABLE `attachment` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(255) NOT NULL,
+  `url` TEXT NOT NULL,
+  `description` TEXT,
+  PRIMARY KEY (`id`)
+);
