@@ -26,3 +26,11 @@ CREATE TABLE `attachment` (
   `description` TEXT,
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE `relationship` (
+  `follower_id` BIGINT(20) NOT NULL,
+  `followee_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`follower_id`, `followee_id`),
+  FOREIGN KEY (`follower_id`) REFERENCES `account`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`followee_id`) REFERENCES `account`(`id`) ON DELETE CASCADE
+);
