@@ -34,3 +34,11 @@ CREATE TABLE `relationship` (
   FOREIGN KEY (`follower_id`) REFERENCES `account`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`followee_id`) REFERENCES `account`(`id`) ON DELETE CASCADE
 );
+
+CREATE TABLE `attachment_binding` (
+  `attachment_id` BIGINT(20) NOT NULL,
+  `status_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`attachment_id`, `status_id`),
+  FOREIGN KEY (`attachment_id`) REFERENCES `attachment`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`status_id`) REFERENCES `status`(`id`) ON DELETE CASCADE
+);
