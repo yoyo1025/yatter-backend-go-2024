@@ -7,20 +7,20 @@ type Status struct {
 	AccountID int       `json:"account_id,omitempty" db:"account_id"`
 	URL       *string   `json:"url,omitempty" db:"url"`
 	Content   string    `json:"status"`
-	CreatedAt time.Time `json:"created_at,omitempty" db:"created_at"`
+	CreateAt  time.Time `json:"create_at,omitempty" db:"create_at"`
 }
 
 type StatusDetail struct {
-	ID               int `json:"id"`
-	Account          Account
-	Content          string    `json:"status"`
-	CreatedAt        time.Time `json:"created_at,omitempty"`
-	MediaAttachments Attachment
+	ID       int `json:"id"`
+	Account  Account
+	Content  string    `json:"status"`
+	CreateAt time.Time `json:"create_at,omitempty"`
+	// MediaAttachments Attachment
 }
 
 func NewStatus(content string) *Status {
 	return &Status{
-		Content:   content,
-		CreatedAt: time.Now(),
+		Content:  content,
+		CreateAt: time.Now(),
 	}
 }
