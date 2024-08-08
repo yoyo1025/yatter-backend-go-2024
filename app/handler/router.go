@@ -32,7 +32,7 @@ func NewRouter(au usecase.Account, su usecase.Statuses, ar repository.Account) h
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	r.Mount("/v1/accounts", accounts.NewRouter(au))
-	r.Mount("/v1/statuses", statuses.NewRouter(su))
+	r.Mount("/v1/statuses", statuses.NewRouter(su, ar))
 	r.Mount("/v1/health", health.NewRouter())
 	r.Mount("/v1/auth", auth.NewRouter(ar))
 

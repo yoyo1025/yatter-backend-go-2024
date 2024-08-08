@@ -10,6 +10,7 @@ import (
 
 type Statuses interface {
 	FetchStatus(ctx context.Context, id int64) (*GetStatusDTO, error)
+	CreateStatus(ctx context.Context, content string, accountID int64) (*CreateStatusDTO, error)
 }
 
 type status struct {
@@ -18,6 +19,10 @@ type status struct {
 }
 
 type GetStatusDTO struct {
+	Status *object.StatusDetail
+}
+
+type CreateStatusDTO struct {
 	Status *object.StatusDetail
 }
 
@@ -35,6 +40,24 @@ func (s *status) FetchStatus(ctx context.Context, id int64) (*GetStatusDTO, erro
 	}
 
 	return &GetStatusDTO{
+		Status: statusInfo,
+	}, nil
+}
+
+func (s *status) CreateStatus(ctx context.Context, content string, accountID int64) (*CreateStatusDTO, error) {
+	// ステータスの挿入
+	statusID, err := s.statusRepo.InsertStatus(ctx, content, accountID)
+	if err != nil {
+		return nil, err
+	}
+
+	// 挿入されたステータスの詳細を取得
+	statusInfo, err := s.statusRepo.GetStatusByID(ctx, statusID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CreateStatusDTO{
 		Status: statusInfo,
 	}, nil
 }

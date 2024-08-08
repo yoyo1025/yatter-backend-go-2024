@@ -50,3 +50,36 @@ func (s *status) GetStatusByID(ctx context.Context, id int64) (*object.StatusDet
 
 	return entity, nil
 }
+
+func (s *status) InsertStatus(ctx context.Context, content string, accountID int64) (int64, error) {
+	query := `
+        INSERT INTO status (account_id, content, create_at) 
+        VALUES (?, ?, NOW())`
+
+	// トランザクションを開始
+	tx, err := s.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return 0, fmt.Errorf("failed to start transaction: %w", err)
+	}
+
+	// ステータスの挿入
+	result, err := tx.ExecContext(ctx, query, accountID, content)
+	if err != nil {
+		tx.Rollback()
+		return 0, fmt.Errorf("failed to insert status: %w", err)
+	}
+
+	// 挿入されたIDを取得
+	statusID, err := result.LastInsertId()
+	if err != nil {
+		tx.Rollback()
+		return 0, fmt.Errorf("failed to retrieve last insert id: %w", err)
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		return 0, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return statusID, nil
+}
