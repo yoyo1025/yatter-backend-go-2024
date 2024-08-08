@@ -56,6 +56,7 @@ func Run() error {
 
 	<-ctx.Done()
 	ctx, _ = context.WithTimeout(context.Background(), time.Second*5)
+	// defer cancel() // cancel関数を呼び出してリソースを解放する
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal(err)
 	}

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"yatter-backend-go/app/domain/object"
 	"yatter-backend-go/app/domain/repository"
 
@@ -47,14 +48,25 @@ func (a *account) Create(ctx context.Context, username, password string) (*Creat
 	}
 
 	defer func() {
-		if err := recover(); err != nil {
-			tx.Rollback()
+		// パニックが発生した場合、トランザクションをロールバック
+		if r := recover(); r != nil {
+			if rollbackErr := tx.Rollback(); rollbackErr != nil {
+				// ロールバックエラーが発生した場合でも、パニックを再発行する
+				panic(fmt.Sprintf("panic: %v; rollback failed: %v", r, rollbackErr))
+			}
+			panic(r)
 		}
 
-		tx.Commit()
+		if commitErr := tx.Commit(); commitErr != nil {
+			panic(fmt.Sprintf("commit failed: %v", commitErr))
+		}
 	}()
+
 	// accountRepoを使用していることから、usecaseはRepoに依存していることがわかる
 	if err := a.accountRepo.Create(ctx, tx, acc); err != nil {
+		if rollbackErr := tx.Rollback(); rollbackErr != nil {
+			return nil, fmt.Errorf("create account failed: %v, rollback failed: %v", err, rollbackErr)
+		}
 		return nil, err
 	}
 

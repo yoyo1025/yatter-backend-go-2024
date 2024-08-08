@@ -65,14 +65,18 @@ func (s *status) InsertStatus(ctx context.Context, content string, accountID int
 	// ステータスの挿入
 	result, err := tx.ExecContext(ctx, query, accountID, content)
 	if err != nil {
-		tx.Rollback()
+		if err := tx.Rollback(); err != nil {
+			return 0, fmt.Errorf("failed to rolleback: %w", err)
+		}
 		return 0, fmt.Errorf("failed to insert status: %w", err)
 	}
 
 	// 挿入されたIDを取得
 	statusID, err := result.LastInsertId()
 	if err != nil {
-		tx.Rollback()
+		if err := tx.Rollback(); err != nil {
+			return 0, fmt.Errorf("failed to rolleback: %w", err)
+		}
 		return 0, fmt.Errorf("failed to retrieve last insert id: %w", err)
 	}
 
