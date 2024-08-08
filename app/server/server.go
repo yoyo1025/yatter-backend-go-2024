@@ -28,10 +28,12 @@ func Run() error {
 
 	accountUsecase := usecase.NewAcocunt(db, dao.NewAccount(db))
 	statusUsecase := usecase.NewStatus(db, dao.NewStatus(db))
+	timelineUsecase := usecase.NewTimeline(db, dao.NewTimeline(db))
 
 	r := handler.NewRouter(
 		accountUsecase,
 		statusUsecase,
+		timelineUsecase,
 		dao.NewAccount(db),
 	)
 
