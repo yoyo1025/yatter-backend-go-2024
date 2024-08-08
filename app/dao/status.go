@@ -87,3 +87,30 @@ func (s *status) InsertStatus(ctx context.Context, content string, accountID int
 
 	return statusID, nil
 }
+
+func (s *status) DeleteStatus(ctx context.Context, id int64) error {
+	query := `
+		DELETE FROM status WHERE id = ?
+	`
+	// トランザクションを開始
+	tx, err := s.db.BeginTxx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("failed to start transaction: %w", err)
+	}
+
+	// ステータスの削除
+	_, err = tx.ExecContext(ctx, query, id)
+	if err != nil {
+		if rbErr := tx.Rollback(); rbErr != nil {
+			return fmt.Errorf("delete status failed: %w, rollback failed: %v", err, rbErr)
+		}
+		return fmt.Errorf("failed to delete status: %w", err)
+	}
+
+	// トランザクションをコミット
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("failed to commit transaction: %w", err)
+	}
+
+	return nil
+}

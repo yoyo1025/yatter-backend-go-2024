@@ -11,6 +11,7 @@ import (
 type Statuses interface {
 	FetchStatus(ctx context.Context, id int64) (*GetStatusDTO, error)
 	CreateStatus(ctx context.Context, content string, accountID int64) (*CreateStatusDTO, error)
+	DeleteStatus(ctx context.Context, id int64) error
 }
 
 type status struct {
@@ -60,4 +61,11 @@ func (s *status) CreateStatus(ctx context.Context, content string, accountID int
 	return &CreateStatusDTO{
 		Status: statusInfo,
 	}, nil
+}
+
+func (s *status) DeleteStatus(ctx context.Context, accountID int64) error {
+	if err := s.statusRepo.DeleteStatus(ctx, accountID); err != nil {
+		return err
+	}
+	return nil
 }

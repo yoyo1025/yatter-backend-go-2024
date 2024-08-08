@@ -28,6 +28,7 @@ func NewRouter(u usecase.Statuses, ar repository.Account) http.Handler {
 		// リクエストの認証を行う
 		r.Use(auth.Middleware(ar))
 		r.Post("/", h.CreateStatus)
+		r.Delete("/{id}", h.DeleteStatus)
 	})
 	r.Get("/{id}", h.FetchStatuse)
 
